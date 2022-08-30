@@ -67,29 +67,6 @@ if check_password():
 	if add_sidebar == 'Opcion defecto':
 		st.write('defecto')
 
-
-		col1, col2 = st.columns(2)
-		columns = [col1, col2]
-		values = [5,4]
-
-		for i in range(0,len(columns)):
-			with columns[i]:
-				st.metric(label='1', value=values[i],delta= "{:.2%}".format(values[i]/100))
-
-		st.dataframe(df)
-
-
-
 	if add_sidebar == 'Otra opción':
 		st.write('Otra opción')
-		pais_select = st.selectbox('Elegi un pais',distintos_paises) #las opciones son una tupla
-
-		fig = px.bar(df,x='Pais_a',y='win_a')
-		st.plotly_chart(fig)
-
-		st.header('st.button')
-
-		if st.button('Say hello'):
-			st.write('Why hello there')
-		else:
-			st.write('Goodbye')
+		
