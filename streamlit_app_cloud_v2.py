@@ -58,6 +58,7 @@ if check_password():
 	st.write("email" in st.experimental_user)
 	st.write(st.experimental_user)
 	st.write(st.experimental_user.email)
+	st.write(st.session_state["username"])
 	st.write('aca termina')
 
 
