@@ -16,7 +16,11 @@ distintos_paises = tuple(set(df['Pais_b'].append(df['Pais_a'])))
 
 
 st.title('Titulo')
-st.write(st.experimental_user.email)
+
+st.write('aca empieza')
+st.write("email" in st.experimental_user)
+st.write('aca termina')
+
 
 add_sidebar = st.sidebar.selectbox('Opcion defecto',('Opcion defecto','Otra opción'))
 
