@@ -35,8 +35,8 @@ def check_password():
 		# Password correct.
 		return True, user
 
+user = check_password()[1]
 if check_password()[0]:
 	st.write("Here goes your normal Streamlit app...")
 	st.button("Click me")
-	st.write(check_password()[1])
 
