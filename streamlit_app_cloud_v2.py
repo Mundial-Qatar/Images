@@ -22,7 +22,8 @@ def check_password():
 
     if "password_correct" not in st.session_state:
         # First run, show inputs for username + password.
-        st.text_input("Username", on_change=password_entered, key="username")
+	global usuario
+	usuario = st.text_input("Username", on_change=password_entered, key="username")	
         st.text_input(
             "Password", type="password", on_change=password_entered, key="password"
         )
@@ -55,10 +56,7 @@ if check_password():
 	st.title('Titulo')
 
 	st.write('aca empieza v2')
-	if st.session_state["username"] == 'Fede':
-		st.write('Fedu')	
-	if st.session_state["username"] == 'Trini':
-		st.write('Trinu')
+	st.write(usuario)
 	st.write('aca termina')
 
 
