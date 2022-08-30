@@ -58,7 +58,10 @@ if check_password():
 	st.write("email" in st.experimental_user)
 	st.write(st.experimental_user)
 	st.write(st.experimental_user.email)
-	st.write(st.session_state["username"])
+	if st.session_state["username"] == 'Fede':
+		st.write('Fede')	
+	if st.session_state["username"] == 'Trini':
+		st.write('Trini')
 	st.write('aca termina')
 
 
