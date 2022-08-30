@@ -55,13 +55,10 @@ if check_password():
 	st.title('Titulo')
 
 	st.write('aca empieza v2')
-	st.write("email" in st.experimental_user)
-	st.write(st.experimental_user)
-	st.write(st.experimental_user.email)
 	if st.session_state["username"] == 'Fede':
-		st.write('Fede')	
+		st.write('Fedu')	
 	if st.session_state["username"] == 'Trini':
-		st.write('Trini')
+		st.write('Trinu')
 	st.write('aca termina')
 
 
