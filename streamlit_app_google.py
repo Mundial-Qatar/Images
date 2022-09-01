@@ -5,7 +5,7 @@ import numpy as np
 from datetime import time, datetime
 from deta import Deta
 from auth_google import *
-import my_secrets as ms
+
 
 if 'usuario' not in st.session_state:
     st.session_state['usuario'] = 'Desconocido'
@@ -17,6 +17,7 @@ with open('style.css') as f:
 # https://lottiefiles.com/search?q=handshake&category=animations
 
 if os.path.isfile('my_secrets.py'): #Con esto chequeo si estoy en entorno local
+	import my_secrets as ms
 	DETA_KEY = ms.DETA_KEY
 	CLIENT_ID = ms.CLIENT_ID
 	CLIENT_SECRET = ms.CLIENT_SECRET
