@@ -1,0 +1,39 @@
+.div_partido {
+    color: blue;
+    text-align: center;
+}
+
+.apuesta {
+    color: red;
+}
+
+
+.vs {
+    color: black;
+}
+
+.streamlit-expanderHeader {
+    color: rgb(25, 97, 11);
+    text-align: center;
+}
+
+.css-15tx938 {  /*Esto es para los label de number_input*/
+    margin: 0;
+    min-height: 0
+}
+
+p {
+    margin: 0;
+    vertical-align: middle;
+}
+
+.pais {
+    margin: 0;
+    vertical-align: middle;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.st-bu {
+    min-width: 5px;
+}
