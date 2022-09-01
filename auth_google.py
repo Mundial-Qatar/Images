@@ -5,7 +5,7 @@ import streamlit as st
 import asyncio
 # https://frankie567.github.io/httpx-oauth/oauth2/
 from httpx_oauth.clients.google import GoogleOAuth2
-import my_secrets as ms
+
 
 #Video youtube: https://www.youtube.com/watch?v=WKnnHbS104A
 # github repo: https://github.com/rsarosh/streamlit
@@ -13,6 +13,7 @@ import my_secrets as ms
 
 
 if os.path.isfile('my_secrets.py'): #Con esto chequeo si estoy en entorno local
+	import my_secrets as ms
 	DETA_KEY = ms.DETA_KEY
 	CLIENT_ID = ms.CLIENT_ID
 	CLIENT_SECRET = ms.CLIENT_SECRET
