@@ -24,10 +24,10 @@ if os.path.isfile('my_secrets.py'): #Con esto chequeo si estoy en entorno local
 	REDIRECT_URI = ms.REDIRECT_URI
 	print('Entorno local')
 else:
-	DETA_KEY = st.secrets["KEYS"][DETA_KEY]
-	CLIENT_ID = st.secrets["KEYS"][CLIENT_ID]
-	CLIENT_SECRET = st.secrets["KEYS"][CLIENT_SECRET]
-	REDIRECT_URI = st.secrets["KEYS"][REDIRECT_URI]
+	DETA_KEY = st.secrets["KEYS"]['DETA_KEY']
+	CLIENT_ID = st.secrets["KEYS"]['CLIENT_ID']
+	CLIENT_SECRET = st.secrets["KEYS"]['CLIENT_SECRET']
+	REDIRECT_URI = st.secrets["KEYS"]['REDIRECT_URI']
 	print('En producción')
 
 deta = Deta(DETA_KEY)
