@@ -65,23 +65,8 @@ st.title('Prode Mundial')
 with st.sidebar:
 	st.title('Detalle de Usuario')
 	st.write('1) Primero Logeate en Google:')
-	
-	if st.button('google'):
-		client: GoogleOAuth2 = GoogleOAuth2(CLIENT_ID, CLIENT_SECRET)
-		authorization_url = asyncio.run(
-        get_authorization_url(client, REDIRECT_URI))
-		def nav_to():
-		    nav_script = """
-		        <meta http-equiv="refresh" content="0; url='%s'">
-		    """ % (authorization_url)
-		    st.write(nav_script, unsafe_allow_html=True)
-		nav_to()
-
-# 			await nav_to()
-# 			st.session_state['usuario'] = display_user()
-# 		asyncio.run(display())
-		
-		
+	st.markdown(get_login_str(),unsafe_allow_html=True)
+	st.write('')
 	st.write('2. Después tocá el botón de entrar')
 	if st.button('Entrar'):
 		st.session_state['usuario'] = display_user()
