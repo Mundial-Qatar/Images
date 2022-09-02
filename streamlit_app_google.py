@@ -102,8 +102,8 @@ if st.session_state['usuario'] != 'Desconocido':
 					col1, col2, col25, col3, col4, col5, col6, col7, col75, col8, col9 = st.columns([3,1,1,3,1,1,1,3,1,1,3]) #proporción en el ancho de las columnas
 					key_a = (str(i)+str(j))+'a'
 					key_b = (str(i)+str(j))+'b'
-					rec_a = 2
-					rec_b = 2
+					rec_a = 0
+					rec_b = 0
 					if st.session_state['usuario'] in [x for x in df_r['usuario']]:
 						max_fecha = df_r[(df_r['usuario'] == st.session_state['usuario'])]['fecha'].max()
 						row = df_r[(df_r['usuario'] == st.session_state['usuario'])&(df_r['fecha'] == max_fecha)]
@@ -178,8 +178,6 @@ if st.session_state['usuario'] != 'Desconocido':
 							st.number_input(label='', min_value=0, max_value=None, value=rec_b, step=1, format=None, key=key_b, help=None, on_change=None, args=None)
 	 			
 	  
-		st.write(st.session_state)
-		st.write(df_r)
 	# 	
 	# 	
 	# 	st.subheader('Range slider')
