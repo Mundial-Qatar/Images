@@ -5,7 +5,8 @@ import numpy as np
 from datetime import time, datetime
 from deta import Deta
 from auth_google import *
-
+import asyncio
+import threading
 
 if 'usuario' not in st.session_state:
     st.session_state['usuario'] = 'Desconocido'
@@ -15,6 +16,8 @@ with open('style.css') as f:
 
 # para animaciones copadas https://www.youtube.com/watch?v=TXSOitGoINE
 # https://lottiefiles.com/search?q=handshake&category=animations
+
+#url: https://fedemazza-fdchi-test-google-streamlit-app-google-jpwo6d.streamlitapp.com/
 
 if os.path.isfile('my_secrets.py'): #Con esto chequeo si estoy en entorno local
 	import my_secrets as ms
@@ -35,13 +38,19 @@ deta = Deta(DETA_KEY)
 db = deta.Base("primera_fase_bwin")
 db_r = deta.Base("resultados")
 
-def fetch_df():
+def fetch_df(db):
 	"""Devuelve los usuarios en la base de datos"""
 	df = db.fetch()
 	return df.items
 
-df = fetch_df()
+
+
+df = fetch_df(db)
 df = pd.DataFrame.from_dict(df[0])
+df_r = fetch_df(db_r)
+df_r = pd.DataFrame.from_dict(df_r)
+
+
 
 
 distintos_paises = tuple(set(df['Pais_b'].append(df['Pais_a'])))
@@ -52,14 +61,28 @@ st.title('Prode Mundial')
 
 #st.header('Esto es un header')
 #st.subheader('Esto es un subheader')
-
+ 
 with st.sidebar:
 	st.title('Detalle de Usuario')
 	st.write('1) Primero Logeate en Google:')
-	st.markdown(body=get_login_str(), unsafe_allow_html=True)
-	st.write('')
+	
+	if st.button('google'):
+		client: GoogleOAuth2 = GoogleOAuth2(CLIENT_ID, CLIENT_SECRET)
+		authorization_url = asyncio.run(
+        get_authorization_url(client, REDIRECT_URI))
+		def nav_to():
+		    nav_script = """
+		        <meta http-equiv="refresh" content="0; url='%s'">
+		    """ % (authorization_url)
+		    st.write(nav_script, unsafe_allow_html=True)
+		nav_to()
+
+# 			await nav_to()
+# 			st.session_state['usuario'] = display_user()
+# 		asyncio.run(display())
+		
+		
 	st.write('2. Después tocá el botón de entrar')
-	st.write('')
 	if st.button('Entrar'):
 		st.session_state['usuario'] = display_user()
 	st.write('')
@@ -68,8 +91,11 @@ with st.sidebar:
 	st.write('')
 	st.write('')
 	add_sidebar = st.selectbox('Ronda',('First Round','2nd'))
+ 
 
 if st.session_state['usuario'] != 'Desconocido':
+	
+	
 	
 	if add_sidebar == 'First Round':
 		grupos = ['A','B','C','D','E','F','G','H']
@@ -88,11 +114,18 @@ if st.session_state['usuario'] != 'Desconocido':
 			with st.expander('Grupo '+grupos[i]):
 				dicc[grupos[i]] = df[df['grupo'] == grupos[i]]
 				for j in range(0,len(dicc[grupos[i]])):
-					col1, col2, col3, col4, col5, col6, col7, col8, col9 = st.columns([3,1,3,1,1,1,3,1,3]) #proporción en el ancho de las columnas
+					col1, col2, col25, col3, col4, col5, col6, col7, col75, col8, col9 = st.columns([3,1,1,3,1,1,1,3,1,1,3]) #proporción en el ancho de las columnas
 					key_a = (str(i)+str(j))+'a'
 					key_b = (str(i)+str(j))+'b'
+					rec_a = 2
+					rec_b = 2
+					if st.session_state['usuario'] in [x for x in df_r['usuario']]:
+						max_fecha = df_r[(df_r['usuario'] == st.session_state['usuario'])]['fecha'].max()
+						row = df_r[(df_r['usuario'] == st.session_state['usuario'])&(df_r['fecha'] == max_fecha)]
+						rec_a = [x for x in row[key_a]][0]
+						rec_b = [x for x in row[key_b]][0]
 					with col1:
-						st.number_input(label='', min_value=0, max_value=None, value=0, step=1, format=None, key=key_a, help=None, on_change=None, args=None)
+						st.number_input(label='', min_value=0, max_value=None, value=rec_a, step=1, format=None, key=key_a, help=None, on_change=None, args=None)
 					with col2:
 						st.markdown(body =
 		 						 f"""
@@ -101,6 +134,8 @@ if st.session_state['usuario'] != 'Desconocido':
 		 						 </div>
 		 						 """
 		 						 , unsafe_allow_html=True)
+					with col25:
+						st.image('Flags/'+dicc[grupos[i]]['Pais_a'][j]+'.png')
 					with col3:
 						st.markdown(body =
 		 						 f"""
@@ -143,8 +178,9 @@ if st.session_state['usuario'] != 'Desconocido':
 								   <p class='pais'>{dicc[grupos[i]]['Pais_b'][j]}</p>
 		 						 </div>
 		 						 """
-		 						 , unsafe_allow_html=True)		
-	
+		 						 , unsafe_allow_html=True)	
+					with col75:
+						st.image('Flags/'+dicc[grupos[i]]['Pais_b'][j]+'.png')
 					with col8:
 						st.markdown(body =
 		 						 f"""
@@ -154,10 +190,11 @@ if st.session_state['usuario'] != 'Desconocido':
 		 						 """
 		 						 , unsafe_allow_html=True)
 					with col9:
-							st.number_input(label='', min_value=0, max_value=None, value=0, step=1, format=None, key=key_b, help=None, on_change=None, args=None)
+							st.number_input(label='', min_value=0, max_value=None, value=rec_b, step=1, format=None, key=key_b, help=None, on_change=None, args=None)
 	 			
-	
+	  
 		st.write(st.session_state)
+		st.write(df_r)
 	# 	
 	# 	
 	# 	st.subheader('Range slider')

@@ -41,13 +41,11 @@ async def get_email(client: GoogleOAuth2, token: str):
     user_id, user_email = await client.get_id_email(token)
     return user_id, user_email
 
-
 def get_login_str():
     client: GoogleOAuth2 = GoogleOAuth2(CLIENT_ID, CLIENT_SECRET)
     authorization_url = asyncio.run(
         get_authorization_url(client, REDIRECT_URI))
     return f"""<a target = '{authorization_url}' href = '{authorization_url}'> Google login </a >"""
-
 
 def display_user() -> void:
     client: GoogleOAuth2 = GoogleOAuth2(CLIENT_ID, CLIENT_SECRET)
@@ -59,4 +57,5 @@ def display_user() -> void:
         get_email(client, token['access_token']))
     #st.write(f"Te logeaste como {user_email} y este es tu user id: {user_id}")
     return user_email
-	
+
+
