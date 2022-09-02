@@ -120,7 +120,7 @@ if st.session_state['usuario'] != 'Desconocido':
 		 						 """
 		 						 , unsafe_allow_html=True)
 					with col25:
-						st.image('Flags/'+dicc[grupos[i]]['Pais_a'][j].replace('í','i')+'.png')
+						st.image('Flags/'+dicc[grupos[i]]['Pais_a'][j]+'.png')
 					with col3:
 						st.markdown(body =
 		 						 f"""
