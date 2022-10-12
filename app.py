@@ -92,15 +92,11 @@ with st.sidebar:
 	
 if Corrio == 'OK':
 	
-	st.write('Hola '+st.session_state['usuario']+'!')
-	
+	st.write('Hola '+st.session_state['usuario']+'!')	
 	if add_sidebar == 'First Round':
 		grupos = ['A','B','C','D','E','F','G','H']
 		colA, colB = st.columns(2)
 		dicc = {}
-		#resultados = {'usuario': st.session_state['usuario'],'fecha': ahora} #acá tengo que poner el usuario
-	# 	if password_entered():
-	# 		st.write(st.session_state["username"])
 		def subir_resultados():
 			st.session_state['fecha']=str(datetime.utcnow().date())+'-'+str(datetime.utcnow().time())
 			st.balloons()
