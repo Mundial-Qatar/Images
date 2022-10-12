@@ -114,11 +114,14 @@ if Corrio == 'OK':
 					key_b = str(i)+'-'+str(j)+'b'
 					rec_a = 0
 					rec_b = 0
-					if st.session_state['usuario'] in [x for x in df_r['usuario']]:
-						max_fecha = df_r[(df_r['usuario'] == st.session_state['usuario'])]['fecha'].max()
-						row = df_r[(df_r['usuario'] == st.session_state['usuario'])&(df_r['fecha'] == max_fecha)]
-						rec_a = [x for x in row[key_a]][0]
-						rec_b = [x for x in row[key_b]][0]
+					try:
+						if st.session_state['usuario'] in [x for x in df_r['usuario']]:
+							max_fecha = df_r[(df_r['usuario'] == st.session_state['usuario'])]['fecha'].max()
+							row = df_r[(df_r['usuario'] == st.session_state['usuario'])&(df_r['fecha'] == max_fecha)]
+							rec_a = [x for x in row[key_a]][0]
+							rec_b = [x for x in row[key_b]][0]
+					except:
+						pass
 					with col1:
 						st.number_input(label='', min_value=0, max_value=None, value=rec_a, step=1, format=None, key=key_a, help=None, on_change=None, args=None)
 					with col2:
