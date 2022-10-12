@@ -110,8 +110,8 @@ if Corrio == 'OK':
 				dicc[grupos[i]] = df[df['grupo'] == grupos[i]]
 				for j in range(0,len(dicc[grupos[i]])):
 					col1, col2, col3, col4, col5, col6, col7, col8, col9 = st.columns([3,2,2,4,2,4,2,2,3]) #proporción en el ancho de las columnas
-					key_a = (str(i)+str(j))+'a'
-					key_b = (str(i)+str(j))+'b'
+					key_a = str(i)+'-'+str(j)+'a'
+					key_b = str(i)+'-'+str(j)+'b'
 					rec_a = 0
 					rec_b = 0
 					if st.session_state['usuario'] in [x for x in df_r['usuario']]:
