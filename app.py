@@ -92,6 +92,8 @@ with st.sidebar:
 	
 if Corrio == 'OK':
 	
+	st.write('Hola '+st.session_state['usuario']+'!')
+	
 	if add_sidebar == 'First Round':
 		grupos = ['A','B','C','D','E','F','G','H']
 		colA, colB = st.columns(2)
