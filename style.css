@@ -1,54 +1,81 @@
 
 
-/**/
-/**/
 
-.e8zbici0{
+.e8zbici0{                              /*Para sacar el menu que viene por defecto en streamlit (Gracias Mati J)*/
     display: none!important ;
 }
 
-[data-testid="stAppViewContainer"] {    /*Fondo general*/
-    background-color: #3d3d3d;
-}
 
-h1{                                     /*Titulo*/
+/*Fondo general
+[data-testid="stAppViewContainer"] {    
+    background-color: #3d3d3d;
+}*/
+
+/*Titulo
+h1{                                     
     color: #BA9F2B;
 }
+*/
 
-[data-testid="stHeader"]{               /*Header*/
+/*Header
+[data-testid="stHeader"]{               
     background-color: #3d3d3d;
 }
+*/
 
-[data-testid="stSidebarNav"] {              /*Navegador de archivos*/
+/*Navegador de archivos
+[data-testid="stSidebarNav"] {              
     background-image: linear-gradient(#3d3d3d,#3d3d3d);
     color: white;
 }
+*/
 
-.css-1ope8sv {              /*Fondo sidebar*/
+/*Fondo sidebar
+.css-1ope8sv {              
     background-image: linear-gradient(#F6CD23,#3d3d3d);
     color: white;
 }
+*/
 
-[data-testid="stExpander"]{             /*Bloques grupos*/
+
+/*Bloques grupos
+[data-testid="stExpander"]{             
     background-color: #BA9F2B;
     color: white;
 }
+*/
 
-[data-testid="stHorizontalBlock"]{         /**/
+/* botón guardar cambios
+[class="css-1cpxqw2 edgvbvh9"]{         
+    background-color: #BA9F2B;
+    color: white;
+}
+ */
+
+
+/*texto en general
+ .stApp{                   
+    text-decoration: none;
+    color: #F6CD23;
+    font-weight: 600;
+}
+*/
+
+
+/*Filas donde va cada partido
+[data-testid="stHorizontalBlock"]{         
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 5rem;
+    height: 3rem;   
 }
+*/
 
 [data-testid="stMarkdownContainer"]{
     display: contents;
 }
 
-[class="css-1cpxqw2 edgvbvh9"]{         /*botón guardar cambios*/
-    background-color: #BA9F2B;
-    color: white;
-}
+
 
 [class="block-container css-18e3th9 egzxvld2"]{
     padding-left: 8em;
@@ -61,55 +88,57 @@ h1{                                     /*Titulo*/
 }
 
 span{                   /*texto en general dentro de spans*/
-    color: white;
+    color: rgb(87, 87, 87);
 }
 
-.stApp{                   /*texto en general*/
-    text-decoration: none;
-    color: #F6CD23;
-    font-weight: 600;
-}
+
 
 .div_partido {         /*texto nombre pais*/
     color: #3d3d3d;
     text-align: center;
 }
 
-.apuesta {         /*texto valor apuesta bwin*/
-    color: white;
+.div_partido_prueba {         /*texto nombre pais ---- Esto es parte de la prueba nada mas*/
+    color: #3d3d3d;
+    text-align: center;
+    display: flex;
+    height: 40px;
 }
 
+[data-baseweb="input"] {
+    min-width: 50%;
+}
+
+[class="css-76z9jo e1jwn65y2"] {
+    max-width: 50%;
+}
 
 .vs {         /*texto vs*/
     color: 3d3d3d;
 }
 
-
-/*[data-testid="stSidebarNav"]{
-    color: white;
-}*/
-
-
+[data-testid="stImage"] {       /*Regula el tamaño maximo de la imagen - foto - bandera*/
+    max-width: 80%;
+}
 
 [class="st-av st-aw st-ax st-ay st-cf st-cm st-b7 st-b4 st-b5 st-cn st-co st-cp st-cq st-c2 st-cr st-cs st-ct st-cu st-cv st-b2 st-cw st-bt st-cx st-cy st-cz st-d0 st-d1"]{            /*Esto es el selector de ronda*/
     background-color: #3d3d3d;
     color: white;
     border-color: #000000;
 }
+
+
 svg.st-dh.st-du.st-bt.st-dv.st-dw.st-bu{        /*flechita del selector de fecha*/
     color: white;
 }
-
-/*[data-testid="column"]{
-    vertical-align: middle;
-    margin: auto;
-}*/
 
 
 .css-15tx938 {  /*Esto es para los label de number_input. por ej. el resultado*/
     margin: 0;
     min-height: 0
 }
+
+
 p {                     /*Para centrar el texto*/
     margin: auto;
     vertical-align: middle;
@@ -117,10 +146,14 @@ p {                     /*Para centrar el texto*/
 .pais {                     /*Para centrar el texto*/
     margin: auto;
     vertical-align: middle;
-    font-size: 20px;
+    font-size: 15px;
     font-weight: bold;
 }
 
-/*.st-bu {
-    min-width: 5px;
-}*/
+.apuesta_elegida {         /*texto valor apuesta bwin*/
+    color: rgb(3, 54, 163);
+    background-color: #a4c4ec;
+    font-weight: bold;
+}
+
+
