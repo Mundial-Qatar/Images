@@ -49,6 +49,9 @@ def fetch_df(db):
 
 df = fetch_df(db)
 df = pd.DataFrame.from_dict(df[0])
+df['Fecha_partido'] = df['Fecha_partido'].apply(lambda x: datetime.strptime(x, '%d/%m/%y %H:%M'))
+df = df.sort_values('Fecha_partido')
+df['Fecha_partido'] = df['Fecha_partido'].apply(lambda x: str(x))
 df_r = fetch_df(db_r)
 df_r = pd.DataFrame.from_dict(df_r)
 
@@ -117,6 +120,9 @@ if Corrio == 'OK':
 							rec_b = [x for x in row[key_b]][0]
 					except:
 						pass
+					
+					text_hover = dicc[grupos[i]]['Fecha_partido'][j]
+					
 					with col1:        #Espacio para resultado 1er Equipo
 						st.number_input(label='', min_value=0, max_value=None, value=rec_a, step=1, format=None, key=key_a, help=None, on_change=None, args=None)
 					
@@ -139,9 +145,9 @@ if Corrio == 'OK':
 			 						 <div class='div_partido_prueba'>
 										 <p style="width: 10%;"><span class={apuesta_a}>{dicc[grupos[i]]['win_a'][j]}</span></p>
 									     <img src="https://github.com/Mundial-Qatar/Prode/blob/main/Flags/{dicc[grupos[i]]['Pais_a'][j]}.png?raw=true" alt="Bandera {dicc[grupos[i]]['Pais_a'][j]}"> 
-									     <p class='pais' style="width: 20%;">{dicc[grupos[i]]['Pais_a'][j]}</p>
+									     <p class='pais' style="width: 20%;">{dicc[grupos[i]]['Pais_a'][j]}<span class="tooltiptext">{text_hover}</span></p>							     
 										 <p style="width: 10%;"><span class={apuesta_tie}>{dicc[grupos[i]]['tie'][j]}</span></p>
-										 <p class='pais' style="width: 20%;">{dicc[grupos[i]]['Pais_b'][j]}</p>
+										 <p class='pais' style="width: 20%;">{dicc[grupos[i]]['Pais_b'][j]}<span class="tooltiptext">{text_hover}</span></p>
 										 <img src="https://github.com/Mundial-Qatar/Prode/blob/main/Flags/{dicc[grupos[i]]['Pais_b'][j]}.png?raw=true" alt="Bandera {dicc[grupos[i]]['Pais_a'][j]}">
 										 <p style="width: 10%;"><span class={apuesta_b}>{dicc[grupos[i]]['win_b'][j]}</span></p>
 								   	 </div>
