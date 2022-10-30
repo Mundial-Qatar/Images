@@ -1,166 +1,89 @@
-
-
-
-.e8zbici0{                              /*Para sacar el menu que viene por defecto en streamlit (Gracias Mati J)*/
+/*.e8zbici0{                              /*Para sacar el menu que viene por defecto en streamlit (Gracias Mati J)
     display: none!important ;
-}
-
-
-/*Fondo general
-[data-testid="stAppViewContainer"] {    
-    background-color: #3d3d3d;
 }*/
 
-/*Titulo
-h1{                                     
-    color: #BA9F2B;
-}
-*/
-
-/*Header
-[data-testid="stHeader"]{               
-    background-color: #3d3d3d;
-}
-*/
-
-/*Navegador de archivos
-[data-testid="stSidebarNav"] {              
-    background-image: linear-gradient(#3d3d3d,#3d3d3d);
-    color: white;
-}
-*/
-
-/*Fondo sidebar
-.css-1ope8sv {              
-    background-image: linear-gradient(#F6CD23,#3d3d3d);
-    color: white;
-}
-*/
-
-
-/*Bloques grupos
-[data-testid="stExpander"]{             
-    background-color: #BA9F2B;
-    color: white;
-}
-*/
-
-/* botón guardar cambios
-[class="css-1cpxqw2 edgvbvh9"]{         
-    background-color: #BA9F2B;
-    color: white;
-}
- */
-
-
-/*texto en general
- .stApp{                   
-    text-decoration: none;
-    color: #F6CD23;
-    font-weight: 600;
-}
-*/
-
-
-/*Filas donde va cada partido
-[data-testid="stHorizontalBlock"]{         
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 3rem;   
-}
-*/
-
-[data-testid="stMarkdownContainer"]{
-    display: contents;
-}
-
-
-
-[class="block-container css-18e3th9 egzxvld2"]{
-    padding-left: 3em;
-    padding-right: 3rem;
-}
-
-.streamlit-expanderHeader {             /*Expander header: Grupo A, Grupo B, etc.*/
-    color: rgb(5, 5, 5);
-    text-align: center;
-}
-
-span{                   /*texto en general dentro de spans*/
-    color: rgb(87, 87, 87);
-}
-
-
-
-.div_partido {         /*texto nombre pais*/
-    color: #3d3d3d;
-    text-align: center;
-}
-
-.div_partido_prueba {         /*texto nombre pais ---- Esto es parte de la prueba nada mas*/
-    color: #3d3d3d;
+/*texto nombre pais*/
+.div_partido_prueba {         
+    /*color: #3d3d3d;*/
     text-align: center;
     display: flex;
     height: 40px;
 }
 
+/*Input numero*/
 [data-baseweb="input"] {
     min-width: 50%;
 }
-
+/*Input numero*/
 [class="css-76z9jo e1jwn65y2"] {
     max-width: 50%;
 }
 
-.vs {         /*texto vs*/
-    color: 3d3d3d;
-}
-
-[data-testid="stImage"] {       /*Regula el tamaño maximo de la imagen - foto - bandera*/
+/*Regula el tamaño maximo de la imagen - foto - bandera*/
+[data-testid="stImage"] {       
     max-width: 80%;
 }
 
-[class="st-av st-aw st-ax st-ay st-cf st-cm st-b7 st-b4 st-b5 st-cn st-co st-cp st-cq st-c2 st-cr st-cs st-ct st-cu st-cv st-b2 st-cw st-bt st-cx st-cy st-cz st-d0 st-d1"]{            /*Esto es el selector de ronda*/
-    background-color: #3d3d3d;
-    color: white;
-    border-color: #000000;
+/*padding o margenes de cada sección de grupos*/
+.css-18e3th9{
+    padding-left: 2rem;
+    padding-right: 2rem;
 }
 
 
-svg.st-dh.st-du.st-bt.st-dv.st-dw.st-bu{        /*flechita del selector de fecha*/
-    color: white;
+
+/*Esto es para los label de number_input. por ej. el resultado*/
+.css-15tx938{  
+    margin: 0;
+    min-height: 0
 }
-
-
-.css-15tx938 {  /*Esto es para los label de number_input. por ej. el resultado*/
+.css-dfoau2{  
+    margin: 0;
+    min-height: 0
+}
+.effi0qh3 {  
     margin: 0;
     min-height: 0
 }
 
 
-p {                     /*Para centrar el texto*/
+
+
+
+/*Para centrar el texto*/
+p {                     
     margin: auto;
     vertical-align: middle;
 }
-.pais {                     /*Para centrar el texto*/
+/*Para centrar el texto*/
+.pais {                     
     margin: auto;
     vertical-align: middle;
     font-size: 15px;
     font-weight: bold;
 }
 
-.apuesta_elegida {         /*texto valor apuesta bwin*/
-    color: rgb(3, 54, 163);
-    background-color: #a4c4ec;
+
+/*texto valor apuesta bwin. Solo para el sobreo de la apuesat actual usada*/
+.apuesta_elegida {         
+    color: #F1BC18;
+    background-color: #797979;
+    font-weight: bold;
+}
+
+
+/*Para centrar el texto de los titulos dentro de cada grupo*/
+.Titulos {                     
+    margin: 0;
+    padding: 0;
+    vertical-align: middle;
+    font-size: 15px;
     font-weight: bold;
 }
 
 
 
-
-
- 
+ /* Tooltip*/
   /* Tooltip text */
   .pais .tooltiptext {
     visibility: hidden;
@@ -180,3 +103,25 @@ p {                     /*Para centrar el texto*/
   .pais:hover .tooltiptext {
     visibility: visible;
   }
+
+
+  /* Barrita espaciadora de los titulos */
+  hr {
+    margin: 1em 0px;
+  }
+
+  .Titulosreco {
+      color: #F1BC18;
+  }
+
+  .Titulosmarca {
+    color: #FBFBFB;
+}
+
+
+[class="css-wek95x e1fqkh3o11"] {
+    width: 0px;
+    min-width: 0;
+    display:none;
+}
+  

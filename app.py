@@ -85,14 +85,13 @@ else:
 st.title('Prode Mundial')
 
 
-with st.sidebar:
-	add_sidebar = st.selectbox('Ronda',('First Round','2nd'),key='params_key') #
+seccion = st.selectbox('Ronda',('Fase de grupos','Semifinalistas','Progreso'),key='params_key') #
 
 	
 if Corrio == 'OK':
 	
 	st.write('Hola '+st.session_state['usuario']+'!')
-	if add_sidebar == 'First Round':
+	if seccion == 'Fase de grupos':
 		grupos = ['A','B','C','D','E','F','G','H']
 		colA, colB = st.columns(2)
 		dicc = {}
@@ -103,11 +102,95 @@ if Corrio == 'OK':
 		st.button('Guardar cambios',on_click=subir_resultados)
 		
 		
+		ratio_columnas = [2,6,2,4,5]
 		for i in range(0,8):
 			with st.expander('Grupo '+grupos[i]):
 				dicc[grupos[i]] = df[df['grupo'] == grupos[i]]
+				col11, col12, col13, col14, col15 = st.columns(ratio_columnas) #proporción en el ancho de las columnas
+				with col11:
+					st.markdown(body =
+			 						 f"""
+					          <div class='div_partido_prueba'>
+								  <p class='Titulosreco'><span class=Titulos></span></p>
+							  </div>	  
+							  <div class='middle container'>
+			 						 <div class='div_partido_prueba'>
+									 <p><span class=Titulos>Equipo A</span></p>
+									 </div>
+							  </div>
+			 						 """
+			 						 , unsafe_allow_html=True)
+				with col13:
+					st.markdown(body =
+			 						 f"""
+					          <div class='div_partido_prueba'>
+								  <p class='Titulosreco'><span class=Titulos></span></p>
+							  </div>	  
+							  <div class='middle container'>
+			 						 <div class='div_partido_prueba'>
+									 <p><span class=Titulos>Equipo B</span></p>
+									 </div>
+							  </div>
+			 						 """
+			 						 , unsafe_allow_html=True)
+				with col12:
+					st.markdown(body =
+			 						 f"""
+		
+								  <div class='middle container'>
+									  <div class='div_partido_prueba'>
+										  <p style="width: 15%;"><span class=Titulos></span></p>
+			  						      <p style="width: 30%;"><span class=Titulos></span></p>
+										  <p style="width: 15%;"><span class=Titulos></span></p>
+										  <p style="width: 30%;"><span class=Titulos></span></p>
+									      <p style="width: 15%;"><span class=Titulos></span></p>
+									  </div>
+							      </div>
+			 						 """
+			 						 , unsafe_allow_html=True)	
+					
+		
+		
+				with col14:			
+					st.markdown(body =
+			 						 f"""
+				  <div class='Titulos'>
+					  <div class='div_partido_prueba'>
+						  <p class='Titulosreco'><span class=Titulos>Recompensas (Bwin)</span></p>
+					  </div>
+					  <div class='div_partido_prueba'>
+						  <p class='Titulosreco'><span class=Titulos>Gana A</span></p>
+						  <p class='Titulosreco'><span class=Titulos>Emp</span></p>
+						  <p class='Titulosreco'><span class=Titulos>Gana B</span></p>
+					  </div>
+				  </div>
+			 						 """
+			 						 , unsafe_allow_html=True)	
+		
+				with col15:			
+					st.markdown(body =
+			 						 f"""
+				  <div class='Titulos'>
+					  <div class='div_partido_prueba'>
+						  <p class='Titulosmarca'><span class=Titulos>Marcador exacto</span></p>
+					  </div>
+					  <div class='div_partido_prueba'>
+						  <p class='Titulosmarca'><span class=Titulos>< 2.5 goles (x1.5)</span></p>
+						  <p class='Titulosmarca'><span class=Titulos>> 2.5 goles (x2)</span></p>
+					  </div>
+				  </div>
+			 						 """
+			 						 , unsafe_allow_html=True)		
+					
+				
+				st.markdown(body =
+			 						 f"""
+									<hr>
+			 						 """
+			 						 , unsafe_allow_html=True)
+				
 				for j in range(0,len(dicc[grupos[i]])):
-					col1, col2, col3= st.columns([2,8,2]) #proporción en el ancho de las columnas
+					col1, col2, col3, col4, col5 = st.columns(ratio_columnas) #proporción en el ancho de las columnas
 					key_a = str(i)+'-'+str(j)+'a'
 					key_b = str(i)+'-'+str(j)+'b'
 					rec_a = 0
@@ -129,13 +212,22 @@ if Corrio == 'OK':
 					with col3:                  #Espacio para resultado 2do equipo
 							st.number_input(label='', min_value=0, max_value=None, value=rec_b, step=1, format=None, key=key_b, help=None, on_change=None, args=None)
 					
-					apuesta_a, apuesta_b, apuesta_tie = 'apuesta','apuesta','apuesta'
+					apuesta_a, apuesta_b, apuesta_tie, apuesta_low, apuesta_high = 'apuesta','apuesta','apuesta','apuesta','apuesta'
 					if st.session_state[key_a]>st.session_state[key_b]:
 						apuesta_a = 'apuesta_elegida'
+						apuesta_definida = dicc[grupos[i]]['win_a'][j]
 					elif st.session_state[key_a]<st.session_state[key_b]:
 						apuesta_b = 'apuesta_elegida'
+						apuesta_definida = dicc[grupos[i]]['win_b'][j]
 					else:
 						apuesta_tie = 'apuesta_elegida'
+						apuesta_definida = dicc[grupos[i]]['tie'][j]
+						
+					suma_goles = st.session_state[key_a]+st.session_state[key_b]
+					if suma_goles < 2.5:
+						apuesta_low = 'apuesta_elegida'
+					else:
+						apuesta_high = 'apuesta_elegida'
 						
 						
 					with col2:        #Score BWIN 1er Equipo
@@ -143,22 +235,44 @@ if Corrio == 'OK':
 		 						 f"""
 								  <div class='middle container'>
 			 						 <div class='div_partido_prueba'>
-										 <p style="width: 10%;"><span class={apuesta_a}>{dicc[grupos[i]]['win_a'][j]}</span></p>
 									     <img src="https://github.com/Mundial-Qatar/Prode/blob/main/Flags/{dicc[grupos[i]]['Pais_a'][j]}.png?raw=true" alt="Bandera {dicc[grupos[i]]['Pais_a'][j]}"> 
 									     <p class='pais' style="width: 20%;">{dicc[grupos[i]]['Pais_a'][j]}<span class="tooltiptext">{text_hover}</span></p>							     
-										 <p style="width: 10%;"><span class={apuesta_tie}>{dicc[grupos[i]]['tie'][j]}</span></p>
+									     <p class='pais' style="width: 5%;">-<span class="tooltiptext">{text_hover}</span></p>							     
 										 <p class='pais' style="width: 20%;">{dicc[grupos[i]]['Pais_b'][j]}<span class="tooltiptext">{text_hover}</span></p>
 										 <img src="https://github.com/Mundial-Qatar/Prode/blob/main/Flags/{dicc[grupos[i]]['Pais_b'][j]}.png?raw=true" alt="Bandera {dicc[grupos[i]]['Pais_a'][j]}">
-										 <p style="width: 10%;"><span class={apuesta_b}>{dicc[grupos[i]]['win_b'][j]}</span></p>
 								   	 </div>
 								  </div>
 		 						 """
 		 						 , unsafe_allow_html=True)
 					
-					
-
-					
-
-	 			
+					with col4:			
+						st.markdown(body =
+				 						 f"""
+					  <div class='Titulos'>
+						  <div class='div_partido_prueba'>
+							  <p><span class={apuesta_a}>{dicc[grupos[i]]['win_a'][j]}</span></p>
+							  <p><span class={apuesta_tie}>{dicc[grupos[i]]['tie'][j]}</span></p>
+							  <p><span class={apuesta_b}>{dicc[grupos[i]]['win_b'][j]}</span></p>
+						  </div>
+					  </div>
+				 						 """
+				 						 , unsafe_allow_html=True)
+							
+					with col5:			
+						st.markdown(body =
+				 						 f"""
+					  <div class='Titulos'>
+						  <div class='div_partido_prueba'>
+							  <p><span class={apuesta_low}>{round(float(apuesta_definida))*1.5}</span></p>
+							  <p><span class={apuesta_high}>{round(float(apuesta_definida),2)*2}</span></p>
+						  </div>
+					  </div>
+				 						 """
+				 						 , unsafe_allow_html=True)
+						
+	elif seccion == 'Semifinalistas':
+		st.write('Esta sección todavía está en construcción')
+	elif seccion == 'Progreso':
+		st.write('Esta sección todavía está en construcción')
 else:
 	st.write('Usuario es desconocido')  
