@@ -124,4 +124,7 @@ p {
     min-width: 0;
     display:none;
 }
-  
+
+.logomundial {
+    max-width: 250px;
+}

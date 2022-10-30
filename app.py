@@ -83,7 +83,11 @@ else:
 	
 	
 st.title('Prode Mundial')
-
+st.markdown(body =
+ 						 f"""
+					<img alt="logo_mundial_qatar" class="logomundial" src="https://github.com/Mundial-Qatar/Prode/blob/main/qatar_light.png?raw=true">
+ 						 """
+ 						 , unsafe_allow_html=True)
 
 seccion = st.selectbox('Ronda',('Fase de grupos','Semifinalistas','Progreso'),key='params_key') #
 
