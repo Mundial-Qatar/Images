@@ -41,6 +41,7 @@ deta = Deta(DETA_KEY)
 
 db = deta.Base("primera_fase_bwin")
 db_r = deta.Base("resultados")
+db_log = deta.Base("usuarios_db")
 
 def fetch_df(db):
 	"""Devuelve la info de la base de datos"""
@@ -96,6 +97,7 @@ if Corrio == 'OK':
 	
 	st.write('Hola '+st.session_state['usuario']+'!')
 	if seccion == 'Fase de grupos':
+		db_log.put({'user': st.session_state['usuario'], 'fecha': str(datetime.utcnow().date())+'-'+str(datetime.utcnow().time())})
 		grupos = ['A','B','C','D','E','F','G','H']
 		colA, colB = st.columns(2)
 		dicc = {}
