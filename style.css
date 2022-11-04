@@ -19,10 +19,18 @@ footer {
     height: 40px;
 }
 
-/*texto nombre pais*/
+/*texto nombre pais en solapa semis*/
 .div_partido_semis {         
     /*color: #3d3d3d;*/
     text-align: left;
+    display: flex;
+    height: 40px;
+}
+
+/*texto ratio en solapa semis*/
+.div_partido_semis_ratio {         
+    /*color: #3d3d3d;*/
+    text-align: right;
     display: flex;
     height: 40px;
 }
@@ -164,6 +172,9 @@ p {
 
 /* Este es el color de cada expander (cada menu de grupos) */
 .st-ds {
+    background-color: #7B1034;
+}
+.st-c6 {
     background-color: #7B1034;
 }
 
