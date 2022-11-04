@@ -1,11 +1,28 @@
-/*.e8zbici0{                              /*Para sacar el menu que viene por defecto en streamlit (Gracias Mati J)
+/*Para sacar el menu que viene por defecto en streamlit (Gracias Mati J)*/
+.e8zbici0{            
     display: none!important ;
-}*/
+}
+
+/*Para que no se vea el "hecho con streamlit"*/
+footer {
+    display: none;
+}
+[class="css-hke02f egzxvld0"] {
+    display: none;
+}
 
 /*texto nombre pais*/
 .div_partido_prueba {         
     /*color: #3d3d3d;*/
     text-align: center;
+    display: flex;
+    height: 40px;
+}
+
+/*texto nombre pais*/
+.div_partido_semis {         
+    /*color: #3d3d3d;*/
+    text-align: left;
     display: flex;
     height: 40px;
 }
@@ -119,12 +136,66 @@ p {
 }
 
 
+/* Todo esto es para ocultar la sidebar */
 [class="css-wek95x e1fqkh3o11"] {
     width: 0px;
     min-width: 0;
     display:none;
+    background-color: #3d3d3d;
+}
+[class="css-1ope8sv e1fqkh3o4"] {
+    width: 0px;
+    min-width: 0;
+    display:none;
+    background-color: #3d3d3d;
+}
+[class="css-67ut48 e1fqkh3o11"] {
+    width: 0px;
+    min-width: 0;
+    display:none;
+    background-color: #3d3d3d;
 }
 
+
 .logomundial {
-    max-width: 250px;
+    max-width: 100%;
 }
+
+
+/* Este es el color de cada expander (cada menu de grupos) */
+.st-ds {
+    background-color: #7B1034;
+}
+
+
+/* Este es DIV del botón de guardar */
+[class="row-widget stButton"] {
+    width: 230px;
+    justify-content: flex-end;
+    display: flex;
+}
+
+/* Este es el botón de guardar */
+[class="css-1fhqdum edgvbvh9"]{
+    background-color: #797979;
+}
+
+
+
+/* Estas son las clases para el código de colores de los puntos por partido en la página del Simulador */
+.class-pendiente {
+    color: rgb(138, 138, 138);
+}
+
+.class-perdedor {
+    color: red;
+}
+
+.class-ganador {
+    color: rgb(9, 255, 0);
+}
+
+.class-ganador-2 {
+    color: rgb(9, 255, 0);
+}
+

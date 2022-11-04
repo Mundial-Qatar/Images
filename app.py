@@ -42,6 +42,7 @@ deta = Deta(DETA_KEY)
 db = deta.Base("primera_fase_bwin")
 db_r = deta.Base("resultados")
 db_log = deta.Base("usuarios_db")
+db_s = deta.Base("semi")
 
 def fetch_df(db):
 	"""Devuelve la info de la base de datos"""
@@ -55,6 +56,8 @@ df = df.sort_values('Fecha_partido')
 df['Fecha_partido'] = df['Fecha_partido'].apply(lambda x: str(x))
 df_r = fetch_df(db_r)
 df_r = pd.DataFrame.from_dict(df_r)
+df_s = fetch_df(db_s)
+df_s = pd.DataFrame.from_dict(df_s)
 
 
 def set_user():
@@ -81,32 +84,166 @@ else:
  	Corrio = 'OK'
  	print('Corrio = OK')
  	st.session_state['params'] = st.experimental_get_query_params()
-	
-	
-st.title('Prode Mundial')
+
+grupos = ['A','B','C','D','E','F','G','H']
+grupos_paises = {'A':['Catar', 'Ecuador','Senegal','Países Bajos'],
+		   'B':['Inglaterra', 'Irán','Estados Unidos','Gales'],
+		   'C':['Argentina', 'Arabia Saudita','México','Polonia'],
+		   'D':['Francia', 'Dinamarca','Túnez','Australia'],
+		   'E':['España', 'Alemania','Japón','Costa Rica'],
+		   'F':['Bélgica', 'Canadá','Marruecos','Croacia'],
+		   'G':['Brasil', 'Serbia','Suiza','Camerún'],
+		   'H':['Portugal', 'Ghana','Uruguay','Corea del Sur']		   
+		   }
+
+paises = {'Catar':51, 'Ecuador':17,'Senegal':11,'Países Bajos':3.5,
+		  'Inglaterra':2.5, 'Irán':67,'Estados Unidos':13,'Gales':17,
+		  'Argentina':2.5, 'Arabia Saudita':151,'México':17,'Polonia':15,
+		  'Francia':2.5, 'Dinamarca':5,'Túnez':51,'Australia':41,
+		  'España':2.85, 'Alemania':3,'Japón':29,'Costa Rica':151,
+		  'Bélgica':3.5, 'Canadá':51,'Marruecos':19,'Croacia':8,
+		  'Brasil':2.25, 'Serbia':13,'Suiza':11,'Camerún':29,
+		  'Portugal':3.75, 'Ghana':41,'Uruguay':7.5,'Corea del Sur':34		   
+		   }
+
+df_paises = pd.DataFrame.from_dict(paises,orient='index').reset_index()
+df_paises.columns = ['pais','ratio']
+df_paises = df_paises.sort_values('ratio').reset_index()
+
+
+
+col_a , col_b = st.columns([10,4])
+with col_a:
+	st.title('Prode Qatar 2022')
+with col_b:
+	seccion = st.selectbox('Ronda',('Fase de grupos','Semifinalistas','Simulador'),key='params_key') #
+
 st.markdown(body =
  						 f"""
-					<img alt="logo_mundial_qatar" class="logomundial" src="https://github.com/Mundial-Qatar/Prode/blob/main/qatar_light.png?raw=true">
+					
+					<img alt="logo_mundial_qatar" class="logomundial" src="https://github.com/Mundial-Qatar/Prode/blob/main/BANNER-LOGO.jpg?raw=true">
  						 """
  						 , unsafe_allow_html=True)
 
-seccion = st.selectbox('Ronda',('Fase de grupos','Semifinalistas','Progreso'),key='params_key') #
 
-	
 if Corrio == 'OK':
 	
-	st.write('Hola '+st.session_state['usuario']+'!')
+	####----Cálculos que quiero hacer para este usuario-----------------------------------------------------------
+	
+	#st.session_state['usuario']
+	puntos_player = 0
+	dicc = {}
+	for i in range(0,8):
+		dicc[grupos[i]] = df[df['grupo'] == grupos[i]]
+		for j in range(0,len(dicc[grupos[i]])):
+			key_a = str(i)+'-'+str(j)+'a'
+			key_b = str(i)+'-'+str(j)+'b'
+			rec_a = 0
+			rec_b = 0
+			try: #Este try es por si la base de datos de resultados está vacía. En ese caso df_r['usuario'] falla
+				if st.session_state['usuario'] in [x for x in df_r['usuario']]:
+					max_fecha = df_r[(df_r['usuario'] == st.session_state['usuario'])]['fecha'].max()
+					row = df_r[(df_r['usuario'] == st.session_state['usuario'])&(df_r['fecha'] == max_fecha)]
+					rec_a = [x for x in row[key_a]][0]
+					rec_b = [x for x in row[key_b]][0]
+			except:
+				pass
+			text_hover = dicc[grupos[i]]['Fecha_partido'][j]			
+			key_a = str(i)+'-'+str(j)+'a'
+			key_b = str(i)+'-'+str(j)+'b'
+			rec_a_real = 0
+			rec_b_real = 0
+			try: #Este try es por si la base de datos de resultados está vacía. En ese caso df_r['usuario'] falla
+				max_fecha = df_r[(df_r['usuario'] == 'mazzafedeitalia@gmail.com')]['fecha'].max()
+				row_real = df_r[(df_r['usuario'] == 'mazzafedeitalia@gmail.com')&(df_r['fecha'] == max_fecha)]
+				rec_a_real = [x for x in row_real[key_a]][0]
+				rec_b_real = [x for x in row_real[key_b]][0]
+			except:
+				pass
+			
+			rec_a = 0
+			rec_b = 0
+			try: #Este try es por si la base de datos de resultados está vacía. En ese caso df_r['usuario'] falla
+				max_fecha = df_r[(df_r['usuario'] == st.session_state['usuario'])]['fecha'].max()
+				row = df_r[(df_r['usuario'] == st.session_state['usuario'])&(df_r['fecha'] == max_fecha)]
+				rec_a = [x for x in row[key_a]][0]
+				rec_b = [x for x in row[key_b]][0]
+			except:
+				pass						
+			
+			
+			fecha_formato_fecha = datetime.strptime(text_hover, '%Y-%m-%d %H:%M:%S')
+
+			puntos_ganador = 0
+			puntos_marcador = 0
+			puntos_partido = 0
+			
+			formato_ganador = 'class-pendiente'
+			formato_marcador = 'class-pendiente'
+			formato_total = 'class-pendiente'
+
+			if rec_a_real == 99:
+				rec_a_real = 'X'
+				rec_b_real = 'X'
+				estado_resultado = 'Todavía no se cargó el resultado'
+			else:
+				if rec_a_real > rec_b_real:
+					outcome_real = 'Gana A'
+				elif rec_a_real < rec_b_real:
+					outcome_real = 'Gana B'
+				else:
+					outcome_real = 'Empate'
+				
+				if rec_a > rec_b:
+					outcome_pronostico = 'Gana A'
+					ratio_ganador = float(dicc[grupos[i]]['win_a'][j])
+				elif rec_a < rec_b:
+					outcome_pronostico = 'Gana B'
+					ratio_ganador = float(dicc[grupos[i]]['win_b'][j])
+				else:
+					outcome_pronostico = 'Empate'
+					ratio_ganador = float(dicc[grupos[i]]['tie'][j])
+				
+				if outcome_real == outcome_pronostico:
+					puntos_ganador = ratio_ganador
+					formato_ganador = 'class-ganador'
+					puntos_partido = puntos_ganador
+				else:
+					puntos_ganador = 0
+					formato_ganador = 'class-perdedor'
+					formato_marcador = 'class-perdedor'
+				
+				if (rec_a == rec_a_real) & (rec_b == rec_b_real):
+					if rec_a + rec_b >2.5:
+						puntos_partido = round(2*puntos_ganador,3)
+						formato_marcador = 'class-ganador'
+					else:
+						puntos_partido = round(1.5*puntos_ganador,3)
+						formato_marcador = 'class-ganador'
+					puntos_marcador = round(puntos_partido - puntos_ganador,3)
+				else:
+					puntos_marcador = 0
+				
+				puntos_player = puntos_player + puntos_partido
+				st.session_state['puntos_player'] = puntos_player
+				estado_resultado = 'Resultado disponible'
+	
+	####---------------------------------------------------------------
+	
 	if seccion == 'Fase de grupos':
-		db_log.put({'user': st.session_state['usuario'], 'fecha': str(datetime.utcnow().date())+'-'+str(datetime.utcnow().time())})
-		grupos = ['A','B','C','D','E','F','G','H']
+		if (st.session_state['usuario'] != 'mazzafedeitalia@gmail.com')&(st.session_state['usuario'] != 'mazzafede@gmail.com'):
+			db_log.put({'user': st.session_state['usuario'], 'fecha': str(datetime.utcnow().date())+'-'+str(datetime.utcnow().time())})
 		colA, colB = st.columns(2)
 		dicc = {}
 		def subir_resultados():
 			st.session_state['fecha']=str(datetime.utcnow().date())+'-'+str(datetime.utcnow().time())
 			st.balloons()
 			return db_r.put({k: v for k, v in st.session_state.items()})
-		st.button('Guardar cambios',on_click=subir_resultados)
-		
+		col_usuario, col_guardar = st.columns([1,1])
+		with col_usuario:
+			st.write('Hola '+st.session_state['usuario']+'!')
+		with col_guardar:
+			st.button('Guardar cambios',on_click=subir_resultados, key=1)
 		
 		ratio_columnas = [2,6,2,4,5]
 		for i in range(0,8):
@@ -213,10 +350,10 @@ if Corrio == 'OK':
 					text_hover = dicc[grupos[i]]['Fecha_partido'][j]
 					
 					with col1:        #Espacio para resultado 1er Equipo
-						st.number_input(label='', min_value=0, max_value=None, value=rec_a, step=1, format=None, key=key_a, help=None, on_change=None, args=None)
+						st.number_input(label='', min_value=0, max_value=100, value=rec_a, step=1, format=None, key=key_a, help=None, on_change=None, args=None)
 					
 					with col3:                  #Espacio para resultado 2do equipo
-							st.number_input(label='', min_value=0, max_value=None, value=rec_b, step=1, format=None, key=key_b, help=None, on_change=None, args=None)
+							st.number_input(label='', min_value=0, max_value=100, value=rec_b, step=1, format=None, key=key_b, help=None, on_change=None, args=None)
 					
 					apuesta_a, apuesta_b, apuesta_tie, apuesta_low, apuesta_high = 'apuesta','apuesta','apuesta','apuesta','apuesta'
 					if st.session_state[key_a]>st.session_state[key_b]:
@@ -269,16 +406,300 @@ if Corrio == 'OK':
 				 						 f"""
 					  <div class='Titulos'>
 						  <div class='div_partido_prueba'>
-							  <p><span class={apuesta_low}>{round(float(apuesta_definida))*1.5}</span></p>
-							  <p><span class={apuesta_high}>{round(float(apuesta_definida),2)*2}</span></p>
+							  <p><span class={apuesta_low}>{round(float(apuesta_definida)*1.5,3)}</span></p>
+							  <p><span class={apuesta_high}>{round(float(apuesta_definida)*2,3)}</span></p>
 						  </div>
 					  </div>
 				 						 """
 				 						 , unsafe_allow_html=True)
+		st.button('Guardar cambios',on_click=subir_resultados, key=2)	
+
+
+
+
+####-------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+			
+	elif seccion == 'Simulador':
+		puntos_player = 0
+		st.title('Puntos (simulador): '+str(round(st.session_state['puntos_player'],2)))
+		st.write('Esta sección todavía está en construcción')
+		if st.session_state['usuario'] in [x for x in df_r['usuario']]:
+
+			now = datetime.utcnow()
+			now = datetime.strptime('2022-11-25 13:00:00', '%Y-%m-%d %H:%M:%S')
+			for i in range(0,8):
+				with st.expander('Grupo '+grupos[i]):
+					dicc = {}
+					dicc[grupos[i]] = df[df['grupo'] == grupos[i]]
+					
+					proporcion_cols = [4,2,3]
+					col_tit1, col_tit2, col_tit3 = st.columns(proporcion_cols)
+	
+					with col_tit1:        
+	
+						st.markdown(body =
+		 						 f"""
+							     <div class='middle container'>
+			 						 <div class='div_partido_prueba'>
+									     <p class='pais' style="width: 25%;">Fecha</p>								 
+										 <p class='pais' style="width: 20%;">Equipo A</p>
+										 <p class='pais' style="width: 35%;"> </p>							     
+										 <p class='pais' style="width: 20%;">Equipo B</p>								 
+								   	 </div>
+								 </div>
+		 						 """
+		 						 , unsafe_allow_html=True)		
+
+					with col_tit3:        
+	
+						st.markdown(body =
+		 						 f"""
+							     <div class='middle container'>
+			 						 <div class='div_partido_prueba'>
+									     <p class='pais' style="width: 33%;">Puntos Ganador</p>								 
+										 <p class='pais' style="width: 33%;">Puntos Marcador</p>						     
+										 <p class='pais' style="width: 34%;">Puntos Partido</p>								 
+								   	 </div>
+								 </div>
+		 						 """
+		 						 , unsafe_allow_html=True)							
+					
+					
+					for j in range(0,len(dicc[grupos[i]])):
+						text_hover = dicc[grupos[i]]['Fecha_partido'][j]
+						col_p1, col_p2, col_p3 = st.columns(proporcion_cols) #proporción en el ancho de las columnas
 						
+						
+						
+						key_a = str(i)+'-'+str(j)+'a'
+						key_b = str(i)+'-'+str(j)+'b'
+						rec_a_real = 0
+						rec_b_real = 0
+						try: #Este try es por si la base de datos de resultados está vacía. En ese caso df_r['usuario'] falla
+							max_fecha = df_r[(df_r['usuario'] == 'mazzafedeitalia@gmail.com')]['fecha'].max()
+							row_real = df_r[(df_r['usuario'] == 'mazzafedeitalia@gmail.com')&(df_r['fecha'] == max_fecha)]
+							rec_a_real = [x for x in row_real[key_a]][0]
+							rec_b_real = [x for x in row_real[key_b]][0]
+						except:
+							pass
+						
+						rec_a = 0
+						rec_b = 0
+						try: #Este try es por si la base de datos de resultados está vacía. En ese caso df_r['usuario'] falla
+							max_fecha = df_r[(df_r['usuario'] == st.session_state['usuario'])]['fecha'].max()
+							row = df_r[(df_r['usuario'] == st.session_state['usuario'])&(df_r['fecha'] == max_fecha)]
+							rec_a = [x for x in row[key_a]][0]
+							rec_b = [x for x in row[key_b]][0]
+						except:
+							pass						
+						
+						
+						fecha_formato_fecha = datetime.strptime(text_hover, '%Y-%m-%d %H:%M:%S')
+
+						puntos_ganador = 0
+						puntos_marcador = 0
+						puntos_partido = 0
+						
+						formato_ganador = 'class-pendiente'
+						formato_marcador = 'class-pendiente'
+						formato_total = 'class-pendiente'
+
+						if rec_a_real == 99:
+							rec_a_real = 'X'
+							rec_b_real = 'X'
+							estado_resultado = 'Todavía no se cargó el resultado'
+						else:
+							if rec_a_real > rec_b_real:
+								outcome_real = 'Gana A'
+							elif rec_a_real < rec_b_real:
+								outcome_real = 'Gana B'
+							else:
+								outcome_real = 'Empate'
+							
+							if rec_a > rec_b:
+								outcome_pronostico = 'Gana A'
+								ratio_ganador = float(dicc[grupos[i]]['win_a'][j])
+							elif rec_a < rec_b:
+								outcome_pronostico = 'Gana B'
+								ratio_ganador = float(dicc[grupos[i]]['win_b'][j])
+							else:
+								outcome_pronostico = 'Empate'
+								ratio_ganador = float(dicc[grupos[i]]['tie'][j])
+							
+							if outcome_real == outcome_pronostico:
+								puntos_ganador = ratio_ganador
+								formato_ganador = 'class-ganador'
+								puntos_partido = puntos_ganador
+							else:
+								puntos_ganador = 0
+								formato_ganador = 'class-perdedor'
+								formato_marcador = 'class-perdedor'
+							
+							if (rec_a == rec_a_real) & (rec_b == rec_b_real):
+								if rec_a + rec_b >2.5:
+									puntos_partido = round(2*puntos_ganador,3)
+									formato_marcador = 'class-ganador'
+								else:
+									puntos_partido = round(1.5*puntos_ganador,3)
+									formato_marcador = 'class-ganador'
+								puntos_marcador = round(puntos_partido - puntos_ganador,3)
+							else:
+								puntos_marcador = 0
+							
+							puntos_player = puntos_player + puntos_partido 
+							estado_resultado = 'Resultado disponible'
+							
+						
+						
+						
+						with col_p1:        
+	
+							st.markdown(body =
+			 						 f"""
+								     <div class='middle container'>
+				 						 <div class='div_partido_prueba'>
+										     <p class='pais' style="width: 25%;">{text_hover}<span class="tooltiptext">{text_hover}</span></p>								 
+											 <p class='pais' style="width: 5%;"><span class="tooltiptext">{text_hover}</span></p>
+										     <img src="https://github.com/Mundial-Qatar/Prode/blob/main/Flags/{dicc[grupos[i]]['Pais_a'][j]}.png?raw=true" alt="Bandera {dicc[grupos[i]]['Pais_a'][j]}"> 
+										     <p class='pais' style="width: 15%;">{dicc[grupos[i]]['Pais_a'][j]}<span class="tooltiptext">{text_hover}</span></p>							     
+										     <p class='pais' style="width: 10%;">{rec_a_real}<span class="tooltiptext">{text_hover}</span></p>
+											 <p class='pais' style="width: 5%;">-<span class="tooltiptext">{text_hover}</span></p>							     
+											 <p class='pais' style="width: 10%;">{rec_b_real}<span class="tooltiptext">{text_hover}</span></p>
+											 <p class='pais' style="width: 15%;">{dicc[grupos[i]]['Pais_b'][j]}<span class="tooltiptext">{text_hover}</span></p>
+											 <img src="https://github.com/Mundial-Qatar/Prode/blob/main/Flags/{dicc[grupos[i]]['Pais_b'][j]}.png?raw=true" alt="Bandera {dicc[grupos[i]]['Pais_a'][j]}">
+									   	 </div>
+									 </div>
+			 						 """
+			 						 , unsafe_allow_html=True)
+						
+
+
+							
+						
+						with col_p2:					
+							st.markdown(body =
+			 						 f"""
+								     <div class='middle container'>
+				 						 <div class='div_partido_prueba'>
+										     <p class='pais' style="width: 100%;">{estado_resultado}<span class="tooltiptext">{text_hover}</span></p>								 
+									   	 </div>
+									 </div>
+			 						 """
+			 						 , unsafe_allow_html=True)
+						
+						
+						
+						with col_p3:					
+							st.markdown(body =
+			 						 f"""
+								     <div class='middle container'>
+				 						 <div class='div_partido_prueba'>
+										     <p class='{formato_ganador}' style="width: 33%;">{puntos_ganador}</p>								 
+											 <p class='{formato_marcador}' style="width: 33%;">{puntos_marcador}</p>						     
+											 <p class='{formato_ganador}' style="width: 34%;">{puntos_partido}</p>	
+									   	 </div>
+									 </div>
+			 						 """
+			 						 , unsafe_allow_html=True)
+		else:
+			st.write('tenés que tener resultados guardados para poder usar esta sección')	
+			
+####-------------------------------------------------------------------------------------------------------------------------------------
+			
+			
 	elif seccion == 'Semifinalistas':
-		st.write('Esta sección todavía está en construcción')
-	elif seccion == 'Progreso':
-		st.write('Esta sección todavía está en construcción')
+		st.markdown(body = '<br>', unsafe_allow_html=True)
+		options = []
+		try: #Este try es por si la base de datos de resultados está vacía. En ese caso df_r['usuario'] falla
+			if st.session_state['usuario'] in [x for x in df_s['usuario']]:
+				max_fecha = df_s[(df_s['usuario'] == st.session_state['usuario'])]['fecha'].max()
+				row = df_s[(df_s['usuario'] == st.session_state['usuario'])&(df_s['fecha'] == max_fecha)]
+				options = list(row['semis'])[0]
+		except:
+			pass
+		
+		def subir_resultados_semis():
+			if len(options)!=4:
+				return
+			st.session_state['fecha']=str(datetime.utcnow().date())+'-'+str(datetime.utcnow().time())
+			st.balloons()
+			return db_s.put({k: v for k, v in st.session_state.items()})
+		st.button('Guardar cambios',on_click=subir_resultados_semis, key=3)
+		options = st.multiselect('Elegí 4 paises que pienses que pasan a la semi',df_paises['pais'],default=options)
+		col_semi1,col_semi2,col_semi3,col_semi4 = st.columns([1,1,1,1])
+		
+		a = 0
+		with col_semi1:
+			for i in range(a,a+8):
+				st.markdown(body =
+			 						 f"""
+								     <div class='middle container'>
+				 						 <div class='div_partido_semis'>
+											  <img src="https://github.com/Mundial-Qatar/Prode/blob/main/Flags/{df_paises['pais'][i]}.png?raw=true" alt="Bandera {df_paises['pais'][i]}">
+											  <p class='pais' style="width: 30%;">{df_paises['pais'][i]}</p>
+											  <p class='pais' style="width: 10%;"></p>
+											  <p class='pais' style="width: 30%;">{str(df_paises['ratio'][i])}</p>
+									   	 </div>
+									 </div>
+			 						 """
+			 						 , unsafe_allow_html=True)
+
+		a = a + 8
+		with col_semi2:
+			for i in range(a,a+8):
+				st.markdown(body =
+			 						 f"""
+								     <div class='middle container'>
+				 						 <div class='div_partido_semis'>
+											  <img src="https://github.com/Mundial-Qatar/Prode/blob/main/Flags/{df_paises['pais'][i]}.png?raw=true" alt="Bandera {df_paises['pais'][i]}">
+											  <p class='pais' style="width: 30%;">{df_paises['pais'][i]}</p>
+											  <p class='pais' style="width: 10%;"></p>
+											  <p class='pais' style="width: 30%;">{str(df_paises['ratio'][i])}</p>
+											</div>
+									 </div>
+			 						 """
+			 						 , unsafe_allow_html=True)
+
+			
+		a = a + 8
+		with col_semi3:
+			for i in range(a,a+8):
+				st.markdown(body =
+			 						 f"""
+								     <div class='middle container'>
+				 						 <div class='div_partido_semis'>
+											  <img src="https://github.com/Mundial-Qatar/Prode/blob/main/Flags/{df_paises['pais'][i]}.png?raw=true" alt="Bandera {df_paises['pais'][i]}">
+											  <p class='pais' style="width: 30%;">{df_paises['pais'][i]}</p>
+											  <p class='pais' style="width: 10%;"></p>
+											  <p class='pais' style="width: 30%;">{str(df_paises['ratio'][i])}</p>
+									   	 </div>
+									 </div>
+			 						 """
+			 						 , unsafe_allow_html=True)
+
+				
+		a = a + 8
+		with col_semi4:
+			for i in range(a,a+8):
+				st.markdown(body =
+			 						 f"""
+								     <div class='middle container'>
+				 						 <div class='div_partido_semis'>
+											  <img src="https://github.com/Mundial-Qatar/Prode/blob/main/Flags/{df_paises['pais'][i]}.png?raw=true" alt="Bandera {df_paises['pais'][i]}">
+											  <p class='pais' style="width: 30%;">{df_paises['pais'][i]}</p>
+											  <p class='pais' style="width: 10%;"></p>
+											  <p class='pais' style="width: 30%;">{str(df_paises['ratio'][i])}</p>
+									   	 </div>
+									 </div>
+			 						 """
+			 						 , unsafe_allow_html=True)
+		
+		st.session_state['semis'] = options		
 else:
 	st.write('Usuario es desconocido')  
