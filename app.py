@@ -176,8 +176,8 @@ if Corrio == 'OK':
 				try: #Este try es por si la base de datos de resultados está vacía. En ese caso df_r['usuario'] falla
 					max_fecha = df_r[(df_r['usuario'] == 'mazzafedeitalia@gmail.com')]['fecha'].max()
 					row_real = df_r[(df_r['usuario'] == 'mazzafedeitalia@gmail.com')&(df_r['fecha'] == max_fecha)]
-					rec_a_real = [x for x in row_real[key_a]][0]
-					rec_b_real = [x for x in row_real[key_b]][0]
+					rec_a_real = [int(x) for x in row_real[key_a]][0]
+					rec_b_real = [int(x) for x in row_real[key_b]][0]
 				except:
 					pass
 				
@@ -186,8 +186,8 @@ if Corrio == 'OK':
 				try: #Este try es por si la base de datos de resultados está vacía. En ese caso df_r['usuario'] falla
 					max_fecha = df_r[(df_r['usuario'] == usuario)]['fecha'].max()
 					row = df_r[(df_r['usuario'] == usuario)&(df_r['fecha'] == max_fecha)]
-					rec_a = [x for x in row[key_a]][0]
-					rec_b = [x for x in row[key_b]][0]
+					rec_a = [int(x) for x in row[key_a]][0]
+					rec_b = [int(x) for x in row[key_b]][0]
 				except:
 					pass						
 				
@@ -544,8 +544,8 @@ if Corrio == 'OK':
 						try: #Este try es por si la base de datos de resultados está vacía. En ese caso df_r['usuario'] falla
 							max_fecha = df_r[(df_r['usuario'] == 'mazzafedeitalia@gmail.com')]['fecha'].max()
 							row_real = df_r[(df_r['usuario'] == 'mazzafedeitalia@gmail.com')&(df_r['fecha'] == max_fecha)]
-							rec_a_real = [x for x in row_real[key_a]][0]
-							rec_b_real = [x for x in row_real[key_b]][0]
+							rec_a_real = [int(x) for x in row_real[key_a]][0]
+							rec_b_real = [int(x) for x in row_real[key_b]][0]
 						except:
 							pass
 						
@@ -554,8 +554,8 @@ if Corrio == 'OK':
 						try: #Este try es por si la base de datos de resultados está vacía. En ese caso df_r['usuario'] falla
 							max_fecha = df_r[(df_r['usuario'] == st.session_state['usuario'])]['fecha'].max()
 							row = df_r[(df_r['usuario'] == st.session_state['usuario'])&(df_r['fecha'] == max_fecha)]
-							rec_a = [x for x in row[key_a]][0]
-							rec_b = [x for x in row[key_b]][0]
+							rec_a = [int(x) for x in row[key_a]][0]
+							rec_b = [int(x) for x in row[key_b]][0]
 						except:
 							pass						
 						
