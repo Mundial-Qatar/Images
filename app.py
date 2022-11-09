@@ -52,6 +52,27 @@ def fetch_df(db):
 	df = db.fetch()
 	return df.items
 
+grupos = ['A','B','C','D','E','F','G','H']
+grupos_paises = {'A':['Catar', 'Ecuador','Senegal','Países Bajos'],
+		   'B':['Inglaterra', 'Irán','Estados Unidos','Gales'],
+		   'C':['Argentina', 'Arabia Saudita','México','Polonia'],
+		   'D':['Francia', 'Dinamarca','Túnez','Australia'],
+		   'E':['España', 'Alemania','Japón','Costa Rica'],
+		   'F':['Bélgica', 'Canadá','Marruecos','Croacia'],
+		   'G':['Brasil', 'Serbia','Suiza','Camerún'],
+		   'H':['Portugal', 'Ghana','Uruguay','Corea del Sur']		   
+		   }
+
+paises = {'Catar':51, 'Ecuador':17,'Senegal':11,'Países Bajos':3.5,
+		  'Inglaterra':2.5, 'Irán':67,'Estados Unidos':13,'Gales':17,
+		  'Argentina':2.5, 'Arabia Saudita':151,'México':17,'Polonia':15,
+		  'Francia':2.5, 'Dinamarca':5,'Túnez':51,'Australia':41,
+		  'España':2.85, 'Alemania':3,'Japón':29,'Costa Rica':151,
+		  'Bélgica':3.5, 'Canadá':51,'Marruecos':19,'Croacia':8,
+		  'Brasil':2.25, 'Serbia':13,'Suiza':11,'Camerún':29,
+		  'Portugal':3.75, 'Ghana':41,'Uruguay':7.5,'Corea del Sur':34		   
+		   }
+
 df = fetch_df(db)
 df = pd.DataFrame.from_dict(df[0])
 df['Fecha_partido'] = df['Fecha_partido'].apply(lambda x: datetime.strptime(x, '%d/%m/%y %H:%M'))
@@ -59,6 +80,15 @@ df = df.sort_values('Fecha_partido')
 df['Fecha_partido'] = df['Fecha_partido'].apply(lambda x: str(x))
 df_r = fetch_df(db_r)
 df_r = pd.DataFrame.from_dict(df_r)
+dicc_r = {}
+for i in range(0,8):
+	dicc_r[grupos[i]] = df[df['grupo'] == grupos[i]]
+	for j in range(0,len(dicc_r[grupos[i]])):
+		key_a = str(i)+'-'+str(j)+'a'
+		key_b = str(i)+'-'+str(j)+'b'
+
+		df_r = df_r[df_r[key_a].notna()]
+		df_r = df_r[df_r[key_b].notna()]
 df_s = fetch_df(db_s)
 df_s = pd.DataFrame.from_dict(df_s)
 
@@ -87,26 +117,7 @@ else:
  	print('Corrio = OK')
  	st.session_state['params'] = st.experimental_get_query_params()
 
-grupos = ['A','B','C','D','E','F','G','H']
-grupos_paises = {'A':['Catar', 'Ecuador','Senegal','Países Bajos'],
-		   'B':['Inglaterra', 'Irán','Estados Unidos','Gales'],
-		   'C':['Argentina', 'Arabia Saudita','México','Polonia'],
-		   'D':['Francia', 'Dinamarca','Túnez','Australia'],
-		   'E':['España', 'Alemania','Japón','Costa Rica'],
-		   'F':['Bélgica', 'Canadá','Marruecos','Croacia'],
-		   'G':['Brasil', 'Serbia','Suiza','Camerún'],
-		   'H':['Portugal', 'Ghana','Uruguay','Corea del Sur']		   
-		   }
 
-paises = {'Catar':51, 'Ecuador':17,'Senegal':11,'Países Bajos':3.5,
-		  'Inglaterra':2.5, 'Irán':67,'Estados Unidos':13,'Gales':17,
-		  'Argentina':2.5, 'Arabia Saudita':151,'México':17,'Polonia':15,
-		  'Francia':2.5, 'Dinamarca':5,'Túnez':51,'Australia':41,
-		  'España':2.85, 'Alemania':3,'Japón':29,'Costa Rica':151,
-		  'Bélgica':3.5, 'Canadá':51,'Marruecos':19,'Croacia':8,
-		  'Brasil':2.25, 'Serbia':13,'Suiza':11,'Camerún':29,
-		  'Portugal':3.75, 'Ghana':41,'Uruguay':7.5,'Corea del Sur':34		   
-		   }
 
 df_paises = pd.DataFrame.from_dict(paises,orient='index').reset_index()
 df_paises.columns = ['pais','ratio']
@@ -386,17 +397,16 @@ if Corrio == 'OK':
 					col1, col2, col3, col4, col5 = st.columns(ratio_columnas) #proporción en el ancho de las columnas
 					key_a = str(i)+'-'+str(j)+'a'
 					key_b = str(i)+'-'+str(j)+'b'
-					rec_a = 0
-					rec_b = 0
+					rec_a = int(0)
+					rec_b = int(0)
 					try: #Este try es por si la base de datos de resultados está vacía. En ese caso df_r['usuario'] falla
 						if st.session_state['usuario'] in [x for x in df_r['usuario']]:
 							max_fecha = df_r[(df_r['usuario'] == st.session_state['usuario'])]['fecha'].max()
 							row = df_r[(df_r['usuario'] == st.session_state['usuario'])&(df_r['fecha'] == max_fecha)]
-							rec_a = [x for x in row[key_a]][0]
-							rec_b = [x for x in row[key_b]][0]
+							rec_a = [int(x) for x in row[key_a]][0]
+							rec_b = [int(x) for x in row[key_b]][0]
 					except:
 						pass
-					
 					text_hover = dicc[grupos[i]]['Fecha_partido'][j]
 					
 					with col1:        #Espacio para resultado 1er Equipo
