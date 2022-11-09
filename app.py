@@ -766,9 +766,12 @@ if Corrio == 'OK':
 				mis_torneos.append(df_torneo.iloc[i]['friends_name'])
 		mis_torneos.append('No estoy en ningún torneo')
 		friends_name = st.selectbox('Si estás en algún torneo elegilo',options=mis_torneos)
-		max_fecha = df_torneo[df_torneo['friends_name']==friends_name]['fecha'].max()
-		torneo_existente = df_torneo[(df_torneo['friends_name']==friends_name)&(df_torneo['fecha']==max_fecha)]
-		participantes = list(torneo_existente['friends_list'])[0]
+		if friends_name != 'No estoy en ningún torneo':
+			max_fecha = df_torneo[df_torneo['friends_name']==friends_name]['fecha'].max()
+			torneo_existente = df_torneo[(df_torneo['friends_name']==friends_name)&(df_torneo['fecha']==max_fecha)]
+			participantes = list(torneo_existente['friends_list'])[0]
+		else:
+			participantes = [st.session_state['usuario']]
 	
 		def pasar_a_fecha_2(fecha):
 			return datetime.strptime(fecha, '%Y-%m-%d %H:%M:%S')
