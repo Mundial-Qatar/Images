@@ -764,6 +764,7 @@ if Corrio == 'OK':
 		for i in range(0,len(df_torneo)):
 			if st.session_state['usuario'] in df_torneo.iloc[i]['friends_list']:
 				mis_torneos.append(df_torneo.iloc[i]['friends_name'])
+		mis_torneos = list(set(mis_torneos))
 		mis_torneos.append('No estoy en ningún torneo')
 		friends_name = st.selectbox('Si estás en algún torneo elegilo',options=mis_torneos)
 		if friends_name != 'No estoy en ningún torneo':
